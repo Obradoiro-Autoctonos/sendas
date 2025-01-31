@@ -1,0 +1,12 @@
+Datos técnicos
+Longitud: 14,7 km
+Fecha de realización: 23/11/2020
+Desnivel de subida: 323 m
+Desnivel de bajada: 320 m
+Punto más alto: 401 m
+Punto más bajo: 153 m
+Tipo de recorrido: Travesía
+MIDE / Severidad del medio natural: 1
+MIDE / Orientación en el itinerario: 3
+MIDE / Dificultad en el desplazamiento: 2
+MIDE / Cantidad de esfuerzo necesario: 3
