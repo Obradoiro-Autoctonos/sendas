@@ -1,0 +1,244 @@
+function CMMRM_RouteRenderer(widget, routeModel) {
+	
+	this.widget = widget;
+	this.routeModel = routeModel;
+	this.polylineCache = {};
+	this.polylines = [];
+	this.polylineOutline = null;
+	
+	this.renderPolylines();
+	this.locationRenderers = this.renderLocations();
+	
+	var that = this;
+	
+	jQuery(this.routeModel).bind('RouteModel:setTravelMode', function() {
+		//that.renderPolylines();
+		that.drawPolylines();
+	});
+	
+	jQuery(this.routeModel).bind('RouteModel:setWaypointsString', function() {
+		that.drawPolylines();
+	});
+	
+	setTimeout(function() {
+		that.widget.map.extendBounds(that.routeModel.getBounds()).center();
+	}, 500);
+	
+	jQuery(this).trigger('RouteRenderer:ready');
+}
+
+CMMRM_RouteRenderer.prototype.renderLocations = function() {
+	var locations = this.routeModel.getLocations();
+	var renderers = [];
+	for (var i=0; i<locations.length; i++) {
+		var renderer = new (this.widget.resolve('LocationRenderer'))(this.widget, locations[i]);
+		renderers.push(renderer);
+	}
+	return renderers;
+};
+
+CMMRM_RouteRenderer.prototype.drawPolylines = function() {
+	var that = this;
+	var waypointsCoords = this.routeModel.getWaypointsCoords();
+	if (waypointsCoords.length == 0) return;
+	var request = new CMMRM_RequestTrail(this, this.routeModel.getTravelMode(), waypointsCoords);
+	request.run(this, function(response, status) {
+		if (status !== google.maps.DirectionsStatus.OK) {
+			var errorMsg = request.getDirectionErrorMessage(status);
+			window.CMMRM.Utils.toast(errorMsg, null, Math.ceil(errorMsg.length/10));
+		} else {
+			that.removeTrailPolylines();
+			that.polylines = that.createTrailPolylines(request.getResponse(), that.widget.map.map, that.routeModel.getPathColor(), that.routeModel.showDirectionalArrows());
+			that.routeModel.setPolylineString(response.routes[0].overview_polyline);
+			
+			if (that.routeModel.showPathOutline()) {
+				that.polylineOutline = new google.maps.Polyline({
+					path: request.getPathCoords(),
+					//strokeColor: 'white',
+					strokeColor: CMMRM_Route_Renderer.pathOutlineColor,
+					//strokeWeight: that.getStrokeWeight()+4,
+					strokeWeight: 8,
+					//opacity: 0.1,
+					opacity: 8,
+					map: that.widget.map.map,
+					zIndex: 5,
+				});
+			}
+			
+			jQuery(that).trigger('RouteRenderer:trailRequestSuccess', {request: request});
+		}
+	});
+};
+
+CMMRM_RouteRenderer.prototype.renderPolylines = function() {
+	var that = this;
+	
+	/*
+	var waypointsCoords = this.routeModel.getWaypointsCoords();
+	if (waypointsCoords.length == 0) return;
+	*/
+
+	var waypointsCoordsString = this.routeModel.getWaypointsCoordsString();
+	if(!waypointsCoordsString) {
+		return;
+	}
+	
+	var waypointsCoordsString_split = waypointsCoordsString.split(',');
+    waypointsCoordsString_split.forEach(function(waypointsenocde) {
+
+		var waypointsCoords = google.maps.geometry.encoding.decodePath(waypointsenocde);
+		
+		var request = new CMMRM_RequestTrail(this, that.routeModel.getTravelMode(), waypointsCoords);
+		
+		if(waypointsCoordsString_split.length == 1) {
+
+			request.run(this, function(response, status) {
+				if (status !== google.maps.DirectionsStatus.OK) {
+					var errorMsg = request.getDirectionErrorMessage(status);
+					window.CMMRM.Utils.toast(errorMsg, null, Math.ceil(errorMsg.length/10));
+				} else {
+					that.polylines = that.createTrailPolylines(request.getResponse(), that.widget.map.map, that.routeModel.getPathColor(), that.routeModel.showDirectionalArrows());
+					that.routeModel.setPolylineString(response.routes[0].overview_polyline);
+					
+					
+					if ( jQuery('input[name="paths"]').length > 0 ){
+						var pathArr = [];
+						for (var i = 0; i < that.polylines.length; ++i) {
+							pathArr = pathArr.concat(that.polylines[i].getPath().getArray());
+						}
+						jQuery('input[name="paths"]').val(JSON.stringify(pathArr));
+					}
+					
+					if (that.routeModel.showPathOutline()) {
+						that.polylineOutline = new google.maps.Polyline({
+							path: request.getPathCoords(),
+							//strokeColor: 'white',
+							strokeColor: CMMRM_Route_Renderer.pathOutlineColor,
+							//strokeWeight: that.getStrokeWeight()+4,
+							strokeWeight: 8,
+							//opacity: 0.1,
+							opacity: 8,
+							map: that.widget.map.map,
+							zIndex: 5,
+							//icons: icons
+						});
+					}
+					jQuery(that).trigger('RouteRenderer:trailRequestSuccess', {request: request});
+				}
+			});
+
+		} else {
+
+			setTimeout(function() {
+				request.run(this, function(response, status) {
+					if (status !== google.maps.DirectionsStatus.OK) {
+						var errorMsg = request.getDirectionErrorMessage(status);
+						window.CMMRM.Utils.toast(errorMsg, null, Math.ceil(errorMsg.length/10));
+						//console.log(status);
+						//console.log(response);
+					} else {
+						//console.log(response);
+
+						//that.removeTrailPolylines();
+						
+						that.polylines = that.createTrailPolylines(request.getResponse(), that.widget.map.map, that.routeModel.getPathColor(), that.routeModel.showDirectionalArrows());
+
+						//that.flattenPolylines = request.flattenTrailPolylines(that.polylines);
+						
+						that.routeModel.setPolylineString(that.routeModel.getPolylineString());
+						
+						if (that.routeModel.showPathOutline()) {
+							that.polylineOutline = new google.maps.Polyline({
+								path: request.getPathCoords(),
+								//strokeColor: 'white',
+								strokeColor: CMMRM_Route_Renderer.pathOutlineColor,
+								//strokeWeight: that.getStrokeWeight()+4,
+								strokeWeight: 8,
+								//opacity: 0.1,
+								opacity: 8,
+								map: that.widget.map.map,
+								zIndex: 5,
+								//icons: icons
+							});
+						}
+						jQuery(that).trigger('RouteRenderer:trailRequestSuccess', {request: request});
+					}
+				});
+			}, 1000);
+
+		}
+
+	});
+};
+
+CMMRM_RouteRenderer.prototype.createTrailPolylines = function(response, map, color, showDirectionalArrows) {
+	var result = [];
+	var legs = response.routes[0].legs;
+	for (var legIndex=0; legIndex<legs.length; legIndex++) {
+		var path = [];
+		var steps = legs[legIndex].steps;
+		for (var j=0; j<steps.length; j++) {
+			path = path.concat(steps[j].path);
+		}
+		result.push(this.createTrailPolyline(path, legIndex, map, color, showDirectionalArrows));
+	}
+	return result;
+};
+
+CMMRM_RouteRenderer.prototype.createTrailPolyline = function(path, legIndex, map, color, showDirectionalArrows) {
+	//console.log(this.pathColor);
+	var icons = [];
+	if (showDirectionalArrows) {
+		var icon = {
+          icon: {
+                  path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                  strokeColor:CMMRM_Route_Renderer.directionalArrowsColor,
+                  strokeOpacity: 0,
+                  fillColor: CMMRM_Route_Renderer.directionalArrowsColor,
+                  fillOpacity: 1,
+                  offset: '0'
+                },
+          repeat:'100px',
+          path:[]
+        };
+		icons.push(icon);
+	}
+	
+	var p = new google.maps.Polyline({
+		path: path,
+		strokeColor: color,
+		//strokeOpacity: 0.5,
+		strokeWeight: this.getStrokeWeight(),
+		zIndex: 100,
+		opacity: 0.1,
+		map: map,
+		icons: icons
+	});
+	p.legIndex = legIndex;
+	
+	/*
+	google.maps.event.addListener(p, 'click', function(h) {
+		console.log(h)
+	});
+	*/
+	return p;
+};
+
+CMMRM_RouteRenderer.prototype.removeTrailPolylines = function() {
+	if (this.polylineOutline) {
+		this.polylineOutline.setMap(null);
+		this.polylineOutline = null;
+	}
+	for (var i=0; i<this.polylines.length; i++) {
+		this.polylines[i].setMap(null);
+	}
+	this.polylines = [];
+};
+
+CMMRM_RouteRenderer.prototype.getLocationRenderers = function() {
+	return this.locationRenderers;
+};
+
+CMMRM_RouteRenderer.prototype.getStrokeWeight = function() {
+	return CMMRM_Map_Settings.routeMapPolylineStrokeWeight;
+};

@@ -1,0 +1,180 @@
+function CMMRM_WidgetSingleRoute(containerId, routeData, waypointsString, locations, polyline) {
+	
+	this.containerId = containerId;
+	this.container = document.getElementById(containerId);
+	if (!this.container) return;
+	
+	this.container.cmmrm = this;
+	
+	this.widgetElement = jQuery(this.container).parents('.cmmrm-route-single').first();
+	if (this.widgetElement.length == 0) {
+		// for posts with shortcodes:
+		this.widgetElement = jQuery(this.container).parent().parent();
+	}
+	
+	this.map = new CMMRM_GoogleMap(containerId);
+	this.routeModel = new CMMRM_RouteModel(routeData, waypointsString, locations, '', polyline);
+	
+	var that = this;
+	that.routeRenderer = new (that.resolve('RouteRenderer'))(that, that.routeModel);
+	
+	if (CMMRM_Map_Settings.routeGeolocation == '1') {
+		
+		if (CMMRM_Map_Settings.routeGeolocationFindmeButton == '1') {
+			addYourLocationButton(that.map.map);
+		}
+
+		this.initGeolocation();
+	}
+	
+	this.addBlocks();
+	this.bindActions();
+	this.initWeather();
+	this.initWheelScrollZoom();
+	
+	this.markerCluster = this.createLocationClusterer();
+
+	if (CMMRM_Map_Settings.routeMapInfoWindowMarkerClustering == '1' && typeof this.markerCluster !== 'undefined') {
+		google.maps.event.addListener(this.markerCluster, 'clusterclick', function(cluster) {
+			var markers = cluster.getMarkers();
+			var markerstring = '';
+			var num = 0;
+			for(i = 0; i < markers.length; i++) {
+				num++;
+				markerstring += num+'. '+markers[i]._labelOptions.text+'<br>';
+			}
+			var infowindow = new google.maps.InfoWindow();
+			infowindow.setContent('<strong>'+markers.length+" Marker(s)</strong><br><br>"+markerstring);
+			infowindow.setPosition(cluster.getCenter());
+			infowindow.setZIndex(99999);
+			infowindow.open(this.map);
+		});
+	}
+	
+	// Hide some features for big routes
+	var waypointsCoords = this.routeModel.getWaypointsCoords();
+	if (waypointsCoords.length >= CMMRM_Map_Settings.editorWaypointsLimit) {
+		jQuery('.cmmrm-route-travel-mode a[data-mode!=DIRECT]', this.widgetElement).hide();
+	}
+	
+	jQuery(this).trigger('CMMRM.widgetReady');
+}
+
+CMMRM_WidgetSingleRoute.prototype.resolve = function(name) {
+	var deps = this.getDependencies();
+	if (typeof deps[name] != 'undefined') {
+		return deps[name];
+	} else {
+		throw "Missing dependency: " + name;
+	}
+};
+
+CMMRM_WidgetSingleRoute.prototype.getDependencies = function() {
+	return {
+		LocationRenderer: CMMRM_LocationRendererSingle,
+		RouteRenderer: CMMRM_RouteRenderer,
+		WaypointRenderer: CMMRM_WaypointRenderer,
+		ElevationGraph: CMMRM_ElevationGraph,
+	};
+};
+
+CMMRM_WidgetSingleRoute.prototype.initGeolocation = function() {
+	return new CMMRM_GeolocationFeature(this);
+	//this.geolocationMarker = new CMMRM_GeolocationMarker(this.map);
+};
+
+CMMRM_WidgetSingleRoute.prototype.getWidgetElement = function() {
+	return this.widgetElement;
+};
+
+CMMRM_WidgetSingleRoute.prototype.addBlocks = function() {
+	this.elevationGraph = new (this.resolve('ElevationGraph'))(this, this.routeModel);
+	this.blockRouteParams = new CMMRM_BlockRouteParams(this, this.routeRenderer, this.elevationGraph);
+	this.blockDirections = new CMMRM_BlockDirections(this, this.routeRenderer);
+};
+
+CMMRM_WidgetSingleRoute.prototype.bindActions = function() {
+	
+	var $ = jQuery;
+	var that = this;
+	var widget = jQuery(this.getWidgetElement());
+	
+	// Center map button
+	$('.cmmrm-map-center-btn', widget).click(function(ev) {
+		ev.stopPropagation();
+		ev.preventDefault();
+		that.map.center();
+	});
+	
+	// Change travel mode
+	$('.cmmrm-route-travel-mode a', widget).click(function(ev) {
+		ev.stopPropagation();
+		ev.preventDefault();
+		var obj = $(this);
+		obj.parents('.cmmrm-route-travel-mode').find('.current').removeClass('current');
+		obj.addClass('current');
+		
+		var mode = obj.data('mode');
+		if (CMMRM_Map_Settings.directTravelModeForAll == '1') {
+			mode = 'DIRECT';
+		}
+		that.routeModel.setTravelMode(mode);
+	});
+	
+	// Display directions steps
+	$('.cmmrm-directions-steps-btn', widget).click(function(ev) {
+		ev.stopPropagation();
+		ev.preventDefault();
+		var wrapper = widget.find('.cmmrm-route-map-canvas-outer');
+		var name = 'data-show-steps';
+		wrapper.attr(name, '1' == wrapper.attr(name) ? '0' : '1');
+	});
+	
+	new CMMRM_FullscreenFeature(this);
+};
+
+CMMRM_WidgetSingleRoute.prototype.initWeather = function() {
+	if (CMMRM_Map_Settings.openweathermapAppKey) {
+		var locations = this.routeModel.getLocations();
+		for (var i=0; i<locations.length; i++) {
+			new CMMRM_BlockLocationWeather(this, locations[i]);
+		}
+	}
+};
+
+CMMRM_WidgetSingleRoute.prototype.createLocationClusterer = function() {
+	if (CMMRM_Map_Settings.routeMapMarkerClustering == '1') {
+		var locationRenderers = this.routeRenderer.getLocationRenderers();
+		var markers = [];
+		for (var i=0; i<locationRenderers.length; i++) {
+			markers.push(locationRenderers[i].getMarker());
+		}
+		var zoomOnClickValSingle = true;
+		if (CMMRM_Map_Settings.routeMapInfoWindowMarkerClustering == '1') {
+			zoomOnClickValSingle = false;
+		}
+		return new MarkerClusterer(this.map.map, markers, {
+			imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+			zoomOnClick: zoomOnClickValSingle,
+			maxZoom: 17, // last 14, highest zoom level is 21
+		});
+	}
+};
+
+CMMRM_WidgetSingleRoute.prototype.initWheelScrollZoom = function() {
+	var that = this;
+	if (CMMRM_Map_Settings.scrollZoom == 'after_click') {
+		this.map.map.set('scrollwheel', false);
+		google.maps.event.addListener(this.map.map, 'click', function(ev) {
+			this.set('scrollwheel', true);
+		});
+	} else {
+		this.map.map.set('scrollwheel', (CMMRM_Map_Settings.scrollZoom == 'enable'));
+	}
+};
+
+/*
+jQuery(window).load(function() {
+	jQuery('.cmmrm-route-travel-mode a:eq(0)').trigger('click');
+});
+*/

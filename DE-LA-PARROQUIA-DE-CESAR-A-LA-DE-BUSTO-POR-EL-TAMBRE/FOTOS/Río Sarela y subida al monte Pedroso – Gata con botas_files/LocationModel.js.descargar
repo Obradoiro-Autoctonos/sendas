@@ -1,0 +1,171 @@
+function CMMRM_LocationModel(data, routeModel) {
+	this.data = data;
+	this.routeModel = routeModel;
+	jQuery(this).trigger('LocationModel:ready');
+}
+
+CMMRM_LocationModel.prototype.getId = function() {
+	return this.data.id;
+};
+
+CMMRM_LocationModel.prototype.getLat = function() {
+	return this.data.lat;
+};
+
+CMMRM_LocationModel.prototype.getLng = function() {
+	return this.data.lng;
+};
+
+CMMRM_LocationModel.prototype.getName = function() {
+	return this.data.name;
+};
+
+CMMRM_LocationModel.prototype.getPosition = function() {
+	return [this.getLat(), this.getLng()];
+};
+
+CMMRM_LocationModel.prototype.getGoogleLatLng = function(param) {
+    if(typeof param === 'undefined'){
+        param = false;
+    }
+    /*
+     * TODO:
+     * MARCIN:
+     * This is problematic - it needs to use this method only for participants NOT for regular locations!!!!
+     */
+	if (param && this.routeModel && this.routeModel.data.latlng.length > 0 && this.data.distance > 0){
+		
+		/*
+		var dist = this.data.distance,
+			geo = google.maps.geometry.spherical,
+			path = this.routeModel.data.latlng,
+			point = path[0],
+			distance = 0,
+			maxDist = this.routeModel.data.distance,
+			leg,
+			overflow,
+			pos;
+		*/
+		
+		var dist = this.data.distance;
+		if(dist < 1000) {
+			dist = dist * 1000;
+		}
+		var geo = google.maps.geometry.spherical;
+		var path = this.routeModel.data.latlng;
+		var point = path[0];
+		var distance = 0;
+		var maxDist = this.routeModel.data.distance;
+		var leg;
+		var overflow;
+		var pos;
+
+		if (dist >= maxDist){
+			return this.routeModel.data.latlng[this.routeModel.data.latlng.length - 1];
+		}
+		
+		for (var p = 1; p < path.length; ++p) {
+			leg = Math.round( geo.computeDistanceBetween( point, path[p] ) );
+			d1 = distance;
+			distance += leg;
+			overflow = dist - (d1 % dist);
+			
+			if (distance >= dist) {
+				pos = geo.computeOffset( point, overflow, geo.computeHeading( point, path[p] ) );
+				p = path.length;
+			}
+			point = path[p];
+		}
+		return pos;
+	}
+	
+	return new google.maps.LatLng(this.getLat(), this.getLng());
+};
+
+CMMRM_LocationModel.prototype.setPosition = function(lat, lng) {
+	this.data.lat = lat;
+	this.data.lng = lng;
+	jQuery(this).trigger('LocationModel:setPosition', {lat: lat, lng: lng});
+	return this;
+};
+
+CMMRM_LocationModel.prototype.remove = function() {
+	jQuery(this).trigger('LocationModel:remove');
+};
+
+CMMRM_LocationModel.prototype.getRoute = function() {
+	return this.routeModel;
+};
+
+CMMRM_LocationModel.prototype.getIcon = function() {
+	return this.data.icon;
+};
+
+
+CMMRM_LocationModel.prototype.getIconSize = function() {
+	return this.data.iconSize;
+};
+
+CMMRM_LocationModel.prototype.getAvatar = function() {
+	return this.data.avatar;
+};
+
+CMMRM_LocationModel.prototype.getColor = function() {
+	if (route = this.getRoute()) {
+		return route.getPathColor();
+	}
+};
+
+CMMRM_LocationModel.prototype.getAddress = function() {
+	return this.data.address;
+};
+
+CMMRM_LocationModel.prototype.setAddress = function(address) {
+	this.data.address = address;
+	jQuery(this).trigger('LocationModel:setAddress', {address: address});
+	return this;
+};
+
+CMMRM_LocationModel.prototype.getLinktext = function() {
+	return this.data.linktext;
+};
+
+CMMRM_LocationModel.prototype.getLinkurl = function() {
+	return this.data.linkurl;
+};
+
+CMMRM_LocationModel.prototype.getDistance = function() {
+	return this.data.distance;
+};
+
+CMMRM_LocationModel.prototype.getDescription = function() {
+	return this.data.description;
+};
+
+CMMRM_LocationModel.prototype.getImages = function() {
+	if (typeof this.data.images == 'object') {
+		return this.data.images;
+	} else {
+		return [];
+	}
+};
+
+CMMRM_LocationModel.prototype.getcImages = function() {
+	if (typeof this.data.certbgimage == 'object') {
+		return this.data.certbgimage;
+	} else {
+		return [];
+	}
+};
+
+CMMRM_LocationModel.prototype.getInfoWindowContent = function() {
+	return this.data.infoWindowContent;
+};
+
+CMMRM_LocationModel.prototype.getInfoWindowOpen = function() {
+	return this.data.infoWindowOpen;
+};
+
+CMMRM_LocationModel.prototype.getGenerateWazeButton = function() {
+	return this.data.generateWazeButton;
+};

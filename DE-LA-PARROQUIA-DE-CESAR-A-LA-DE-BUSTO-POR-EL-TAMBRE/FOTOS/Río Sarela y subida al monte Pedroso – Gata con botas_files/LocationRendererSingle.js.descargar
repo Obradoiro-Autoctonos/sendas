@@ -1,0 +1,148 @@
+function CMMRM_LocationRendererSingle(widget, locationModel) {
+	CMMRM_LocationRenderer.call(this, widget, locationModel);
+	this.tooltip = this.initializeTooltip();
+	this.infoWindow = this.initializeInfoWindow(locationModel.getId());
+}
+
+CMMRM_LocationRendererSingle.prototype = Object.create(CMMRM_LocationRenderer.prototype);
+CMMRM_LocationRendererSingle.prototype.contructor = CMMRM_LocationRenderer;
+
+CMMRM_LocationRendererSingle.prototype.getLabelText = function() {
+	if (CMMRM_Map_Settings.routeMapLabelType == 'tooltip') {
+		return "";
+	} else {
+		return CMMRM_LocationRenderer.prototype.getLabelText.call(this);
+	}
+};
+
+CMMRM_LocationRendererSingle.prototype.getMarkerIconOptions = function() {
+	var options = CMMRM_LocationRenderer.prototype.getMarkerIconOptions.call(this);
+	if (CMMRM_Map_Settings.routeMapLabelType == 'tooltip') {
+		//options.title = this.locationModel.getName();
+	}
+	return options;
+};
+
+CMMRM_LocationRendererSingle.prototype.initializeTooltip = function() {
+	if (CMMRM_Map_Settings.routeMapLabelType == 'tooltip') {
+		var that = this;
+		var tooltip = new CMMRM_Tooltip(this.widget, this.locationModel.getGoogleLatLng(), this.locationModel.getName(), {backgroundColor: CMMRM_Map_Settings.mapTooltipBgColor});
+		
+		tooltip.offsetTop = -20;
+		tooltip.offsetLeft = 20;
+
+		tooltip.zIndex = 999999;
+		
+		google.maps.event.addDomListener(this.marker, 'mouseenter', function(ev) {
+			tooltip.setMap(that.widget.map.map);
+		});
+
+		google.maps.event.addDomListener(this.marker, 'mouseleave', function(ev) {
+			tooltip.setMap(null);
+		});
+		
+		return tooltip;
+	}
+};
+
+CMMRM_LocationRendererSingle.prototype.initializeInfoWindow = function(location_id) {
+	var that = this;
+	var $ = jQuery;
+
+	if (CMMRM_Map_Settings.routeMapLocationsInfoWindow == '1') {
+		var infowindow = new google.maps.InfoWindow({
+	          content: '<div class="cmmrm-infowindow location_renderer_single">' + this.locationModel.getInfoWindowContent() + '</div>',
+	          position: this.locationModel.getGoogleLatLng(),
+	          pixelOffset: new google.maps.Size(0, -40)
+        });
+		google.maps.event.addDomListener(this.marker, 'click', function(ev) {
+			$('.gm-ui-hover-effect').trigger('click');
+			infowindow.setZIndex(9000);
+			infowindow.open(that.widget.map.map, this.marker);
+			$(window).keydown(function(ev) { // Close fullscreen
+				if (infowindow && ev.keyCode == 27) {
+					infowindow.setMap(null);
+					infowindow = null;
+				}
+			});
+			if (CMMRM_Map_Settings.routeMapLocationsHighlightList == '1') {
+				$(".cmmrm-location-details").removeClass('active');
+				$(".location-"+location_id).addClass('active');
+				
+				var scrollTo = '';
+				var scrollObj = '';
+				if($(".cmmrm_scroll_div").length > 0) {
+					scrollToObj = $(".cmmrm_scroll_div").scrollTop();
+					scrollTo = $(".location-"+location_id).position().top + scrollToObj;
+					scrollObj = $(".cmmrm_scroll_div");
+				} else {
+					scrollTo = $(".location-"+location_id).offset().top;
+					scrollObj = $("html, body");
+				}
+				scrollObj.stop().animate({scrollTop:scrollTo}, 500, 'swing', function() {});
+			}
+		});
+		if (CMMRM_Map_Settings.allowInfoWindowAutoOpen == '1' && this.locationModel.getInfoWindowOpen()) {
+			new google.maps.event.trigger( this.marker, 'click' );
+			this.widget.map.setCenterZoomOffset(-1);
+		}
+		return infowindow;
+	}
+
+	if (CMMRM_Map_Settings.routeMapLocationsHighlightList == '1') {
+
+		google.maps.event.addDomListener(this.marker, 'click', function(ev) {
+
+			$(".cmmrm-location-details").removeClass('active');
+			$(".location-"+location_id).addClass('active');
+			
+			var scrollTo = '';
+			var scrollObj = '';
+			if($(".cmmrm_scroll_div").length > 0) {
+				scrollToObj = $(".cmmrm_scroll_div").scrollTop();
+				scrollTo = $(".location-"+location_id).position().top + scrollToObj;
+				scrollObj = $(".cmmrm_scroll_div");
+			} else {
+				scrollTo = $(".location-"+location_id).offset().top;
+				scrollObj = $("html, body");
+			}
+			scrollObj.stop().animate({scrollTop:scrollTo}, 500, 'swing', function() {});
+
+		});
+
+	}
+
+};
+
+if (CMMRM_Map_Settings.routeMapLocationsHighlightList == '1') {
+
+	jQuery(document).ready(function() {
+		jQuery('body').on('click', '.cmmrm-location-details h3', function() {
+
+			var location_id = jQuery(this).data('id');
+			jQuery(".cmmrm-location-details").removeClass('active');
+			jQuery(".location-"+location_id).addClass('active');
+
+			jQuery('.gm-ui-hover-effect').trigger('click');
+
+			var ind = jQuery(this).data('index');
+			jQuery('.cmmrm-custom-marker').css('opacity', 0.5);
+			jQuery('.cmmrm-map-label').css('opacity', 0.5);
+			jQuery('.marker-top-index-'+ind).css('opacity', 1);
+			jQuery('.marker-label-index-'+ind).css('opacity', 1);
+
+			if(jQuery(".cmmrm_scroll_div").length == 0) {
+				var scrollTo = '';
+				if(jQuery(".cmmrm-toolbar").length == 1) {
+					scrollTo = jQuery(".cmmrm-toolbar").offset().top;
+				} else {
+					scrollTo = jQuery(".cmmrm-route-map-canvas-outer").offset().top;
+				}
+				var scrollObj = jQuery("html, body");
+				scrollObj.stop().animate({scrollTop:scrollTo}, 500, 'swing', function() {});
+			}
+
+		});
+	});
+
+}

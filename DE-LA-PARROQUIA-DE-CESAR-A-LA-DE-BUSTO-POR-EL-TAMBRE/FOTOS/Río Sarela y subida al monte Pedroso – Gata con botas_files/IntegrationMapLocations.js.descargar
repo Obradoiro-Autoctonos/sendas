@@ -1,0 +1,239 @@
+function CMMRM_IntegrationMapLocations(widget, locations, setting) {
+	this.widget = widget;
+	this.locations = locations;
+	this.setting = setting;
+	var that = this;
+	that.addLocationMarkers();
+	jQuery(this.widget).bind('CMMRM.widgetReady', function() {
+		
+	});
+};
+
+CMMRM_IntegrationMapLocations.prototype.addLocationMarkers = function() {
+	var markers = [];
+	var routeModel = null;
+	var locationInfoEvent = this.setting;
+	var map = this.widget;
+	for (var i=0; i<this.locations.length; i++) {
+		let obj = this.locations[i];
+		
+		shapeFillColor = obj.shape_fill_color;
+		shapeFillOpacity = obj.shape_fill_opacity;
+		shapeStrokeColor = obj.shape_stroke_color;
+		shapeStrokeOpacity = obj.shape_stroke_opacity;
+		shapeStrokeWeight = obj.shape_stroke_weight;
+		editableFlag = false;
+		draggableFlag = false;
+		
+		if(CMMRM_Map_Location_Integration.shapeTooltipShow == 1) {
+			shapeTooltip = true;
+		} else {
+			shapeTooltip = false;
+		}
+
+		if(obj.shape_type == 'polygon' && obj.shape_polygon_coords != '') {
+			
+			var polygonCoordinates = [];
+			var shape_polygon_coords = obj.shape_polygon_coords;
+			var shape_polygon_coordsRowArr = shape_polygon_coords.split(',(');
+			jQuery.each( shape_polygon_coordsRowArr, function(k, coordSet) {
+				coordSet = coordSet.replace(/\(/gi,'');
+				coordSet = coordSet.replace(/\)/gi,'');
+				var coordSetArr = coordSet.split(', ');
+				polygonCoordinates.push(new google.maps.LatLng(coordSetArr[0], coordSetArr[1]));
+			});
+			
+			cmlocPolygon = new google.maps.Polygon({
+				id: obj.ID,
+				fillColor: shapeFillColor,
+				fillOpacity: shapeFillOpacity,
+				strokeColor: shapeStrokeColor,
+				strokeOpacity: shapeStrokeOpacity,
+				strokeWeight: shapeStrokeWeight,
+				editable: editableFlag,
+				draggable: draggableFlag,
+				zIndex: 1,
+				paths: polygonCoordinates,
+			});
+			
+			cmlocPolygon.setMap(map.map.map);
+			
+			if(shapeTooltip == true) {
+				cmlocPolygon.addListener('click', showPolygonTooltip);
+				infoWindow = new google.maps.InfoWindow;
+				function showPolygonTooltip(event) {
+					var contentString = '<div class="cmmrm-ajax-loader"></div>';
+					infoWindow.setContent(contentString);
+					infoWindow.setPosition(event.latLng);
+
+					if (typeof infowindow !== 'undefined') {
+						infowindow.close();
+					}
+					if (typeof infoWindow !== 'undefined') {
+						infoWindow.close();
+					}
+
+					infoWindow.open(map.map.map);
+					
+					var location_id = this.id;
+					jQuery.post({
+						url: CMMRM_Map_Settings.ajaxurl,
+						data: {action: 'cmloc_get_route_infowindow', id: location_id, infowindow_type: 'shape'},
+						success: function(response) {
+							infoWindow.setContent(response);
+						}
+					});
+
+				}
+			}
+
+		}
+		
+		if(obj.shape_type == 'circle' && obj.shape_circle_center != '' && obj.shape_circle_radius != '') {
+			
+			var shape_circle_latlong = obj.shape_circle_center;
+			shape_circle_latlong = shape_circle_latlong.replace('(','');
+			shape_circle_latlong = shape_circle_latlong.replace(')','');
+			var shape_circle_latlongArr = shape_circle_latlong.split(', ');
+			var shape_circle_latitude = parseFloat(shape_circle_latlongArr[0]);
+			var shape_circle_longitude = parseFloat(shape_circle_latlongArr[1]);
+
+			var cmlocCircle = new google.maps.Circle({
+				id: obj.ID,
+				fillColor: shapeFillColor,
+				fillOpacity: shapeFillOpacity,
+				strokeColor: shapeStrokeColor,
+				strokeOpacity: shapeStrokeOpacity,
+				strokeWeight: shapeStrokeWeight,
+				editable: editableFlag,
+				draggable: draggableFlag,
+				zIndex: 1,
+				map: map.map.map,
+				center: {lat:shape_circle_latitude, lng:shape_circle_longitude},
+				radius: parseFloat(obj.shape_circle_radius)
+			});
+
+			if(shapeTooltip == true) {
+				cmlocCircle.addListener('click', showCircleTooltip);
+				infoWindow = new google.maps.InfoWindow;
+				function showCircleTooltip(event) {
+					
+					var contentString = '<div class="cmmrm-ajax-loader"></div>';
+					infoWindow.setContent(contentString);
+					infoWindow.setPosition(event.latLng);
+
+					if (typeof infowindow !== 'undefined') {
+						infowindow.close();
+					}
+					if (typeof infoWindow !== 'undefined') {
+						infoWindow.close();
+					}
+
+					infoWindow.open(map.map.map);
+					
+					var location_id = this.id;
+					jQuery.post({
+						url: CMMRM_Map_Settings.ajaxurl,
+						data: {action: 'cmloc_get_route_infowindow', id: location_id, infowindow_type: 'shape'},
+						success: function(response) {
+							infoWindow.setContent(response);
+						}
+					});
+
+				}
+			}
+
+		}
+		
+		if(obj.shape_type == 'rectangle' && obj.shape_rectangle_bounds != '') {
+			
+			var shape_rectangle_bounds = obj.shape_rectangle_bounds;
+			shape_rectangle_bounds = shape_rectangle_bounds.replace(/\(/gi,'');
+			shape_rectangle_bounds = shape_rectangle_bounds.replace(/\)/gi,'');
+			var shape_rectangle_boundsArr = shape_rectangle_bounds.split(', ');
+			var shape_rectangle_north = parseFloat(shape_rectangle_boundsArr[0]);
+			var shape_rectangle_west = parseFloat(shape_rectangle_boundsArr[1]);
+			var shape_rectangle_south = parseFloat(shape_rectangle_boundsArr[2]);
+			var shape_rectangle_east = parseFloat(shape_rectangle_boundsArr[3]);
+
+			var cmlocRectangle = new google.maps.Rectangle({
+				id: obj.ID,
+				fillColor: shapeFillColor,
+				fillOpacity: shapeFillOpacity,
+				strokeColor: shapeStrokeColor,
+				strokeOpacity: shapeStrokeOpacity,
+				strokeWeight: shapeStrokeWeight,
+				editable: editableFlag,
+				draggable: draggableFlag,
+				zIndex: 1,
+				map: map.map.map,
+				bounds: {north:shape_rectangle_north, south:shape_rectangle_south, east:shape_rectangle_east, west:shape_rectangle_west}
+			});
+			
+			if(shapeTooltip == true) {
+				cmlocRectangle.addListener('click', showRectangleTooltip);
+				infoWindow = new google.maps.InfoWindow;
+				function showRectangleTooltip(event) {
+
+					var contentString = '<div class="cmmrm-ajax-loader"></div>';
+					infoWindow.setContent(contentString);
+					infoWindow.setPosition(event.latLng);
+
+					if (typeof infowindow !== 'undefined') {
+						infowindow.close();
+					}
+					if (typeof infoWindow !== 'undefined') {
+						infoWindow.close();
+					}
+
+					infoWindow.open(map.map.map);
+					
+					var location_id = this.id;
+					jQuery.post({
+						url: CMMRM_Map_Settings.ajaxurl,
+						data: {action: 'cmloc_get_route_infowindow', id: location_id, infowindow_type: 'shape'},
+						success: function(response) {
+							infoWindow.setContent(response);
+						}
+					});
+				}
+			}
+
+		}
+
+		let locationModel = new CMMRM_LocationModel(obj, routeModel);
+		let renderer = new CMMRM_LocationRenderer(this.widget, locationModel);
+		var prev_infowindow = false;
+		markers.push(renderer.marker);
+		jQuery(renderer.marker).bind('click', function() {
+			if(locationInfoEvent == 'redirect') {
+				window.location.href = obj.permalink;
+			} else if(locationInfoEvent == 'tooltip') {
+				var infowindow = new google.maps.InfoWindow({
+					content: '<div class="cmmrm-infowindow integration_map_location">' + obj.infoContent + '</div>',
+					position: locationModel.getGoogleLatLng(),
+					pixelOffset: new google.maps.Size(0, -40)
+				});
+				infowindow.setZIndex(9000);
+				infowindow.open(map, renderer.marker);
+
+				if(CMMRM_Map_Location_Integration.indexMapInfoWindowAutoClose == 1) {
+					if( prev_infowindow && prev_infowindow != infowindow ) {
+						prev_infowindow.close();
+					}
+					prev_infowindow = infowindow;
+				}
+
+			} else {
+				// none;
+			}
+		});
+    }
+   
+    new MarkerClusterer(map.map.map, markers, {
+        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+        zoomOnClick: false,
+        maxZoom: 17, // last 14, highest zoom level is 21
+    });
+
+};

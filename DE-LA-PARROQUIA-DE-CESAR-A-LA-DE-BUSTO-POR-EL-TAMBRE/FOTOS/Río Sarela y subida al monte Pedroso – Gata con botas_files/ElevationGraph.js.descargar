@@ -1,0 +1,741 @@
+function CMMRM_ElevationGraph(widget, routeModel) {
+	
+	this.widget = widget;
+	this.routeModel = routeModel;
+	this.results = null;
+	
+	this.maxElevation = 0;
+	this.minElevation = 99999;
+	this.elevationGain = 0;
+	this.elevationDescent = 0;
+	
+	this.graph = null;
+	this.graphData = null;
+	
+	if (this.getTravelMode() == 'DIRECT') {
+		this.calculateElevationAlongPath(this.getWaypointsCoords());
+	}
+	
+	this.initMapEventListeners();
+};
+
+CMMRM_ElevationGraph.prototype.initMapEventListeners = function(path) {
+	
+	var that = this;
+	var timeout = null;
+	
+	jQuery(this.routeModel).bind('RouteModel:setPolylineString', function() {
+		var route = this;
+		clearTimeout(timeout);
+		timeout = setTimeout(function() {
+			that.calculateElevationAlongPath(route.getPolylineCoords());
+		}, 500);
+	});
+	
+	/*
+	jQuery(this.widget.routeRenderer).bind('RouteRenderer:trailRequestSuccess', function() {
+		var routeRenderer = this;
+		console.log('RouteRenderer:trailRequestSuccess', this.polylines);
+	});
+	*/
+};
+
+CMMRM_ElevationGraph.prototype.calculateElevationAlongPath = function(path) {
+	// https://developers.google.com/maps/documentation/javascript/elevation
+	if (path.length < 2) return;
+	else {
+		var elevator = new google.maps.ElevationService;
+		var that = this;
+		var samples = parseInt(CMMRM_Map_Settings.elevation_graph_per_request);
+		if(typeof samples == 'undefined' || samples == '') {
+			samples = 450;
+		}
+		path = this.reduceCoordsNumber(path, samples);
+		elevator.getElevationAlongPath({
+			'path': path,
+			'samples': samples,
+		}, function(results, status) {
+			that.results = results;
+			that.status = status;
+			that.processElevationResults(results, status);
+		});
+	}
+};
+
+CMMRM_ElevationGraph.prototype.reduceCoordsNumber = function(path, max) {
+	//console.log('path.lengt = ', path.length);
+	//console.log('max = ', max);
+	if (path.length < max) return path;
+	else {
+		var result = [];
+		var i = 0;
+		var step = path.length/max;
+		while (i < path.length) {
+			result.push(path[Math.floor(i)]);
+			i += step;
+		}
+		//console.log('result.len = ', result.length);
+		return result;
+	}
+};
+
+//https://developers.google.com/maps/premium/previous-licenses/articles/usage-limits OVER_QUERY_LIMIT
+CMMRM_ElevationGraph.prototype.processElevationResults = function(results, status) {
+	if (status !== google.maps.ElevationStatus.OK) {
+		console.log('[CMMRM_ElevationGraph] Elevation service failed due to: ' + status);
+		return;
+	} else {
+		
+		jQuery('.cmmrm-route-editor input[name="elevation-response"]').val(JSON.stringify(results));
+		
+		this.maxElevation = 0;
+		this.minElevation = 99999;
+		this.elevationGain = 0;
+		this.elevationDescent = 0;
+		
+		var prev = null;
+		for (var i=0; i<results.length; i++) {
+			var elevation = results[i].elevation;
+			if (elevation > this.maxElevation) {
+				this.maxElevation = elevation;
+			}
+			if (elevation < this.minElevation) {
+				this.minElevation = elevation;
+			}
+			//console.log('elev '+ elevation +' --- '+(elevation-prev));
+			if (typeof prev == 'number') {
+				if (elevation-prev > 0) {
+					this.elevationGain += (elevation-prev);
+				} else {
+					this.elevationDescent += (prev-elevation);
+				}
+			}
+			prev = elevation;
+		}
+		
+		if (this.minElevation == 99999) {
+			this.minElevation = 0;
+		}
+		
+		this.showElevationGraph(results);
+
+		//mkk
+		jQuery(this).trigger('ElevationGraph:successResponse', {results: results});
+		
+	}
+};
+
+CMMRM_ElevationGraph.prototype.showElevationGraph = function(elevations) {
+	var graphDiv = this.getGraphCanvasContainer();
+	this.showCustomChart(elevations, graphDiv);
+};
+
+CMMRM_ElevationGraph.prototype.showCustomChart = function(elevations, graphDiv) {
+	var $ = jQuery;
+
+	graphDiv.html('');
+	var container = $('<div>', {'class': 'cmmrm-custom-elevation-graph'});
+	graphDiv.append(container);
+	
+	//console.log(elevations);
+	
+	var max = null;
+	var min = null;
+	for (var i=0; i<elevations.length; i++) {
+		if (max == null || max < elevations[i].elevation) {
+			max = elevations[i].elevation;
+		}
+		if (min == null || min > elevations[i].elevation) {
+			min = elevations[i].elevation;
+		}
+	}
+	
+	//console.log(min, max);
+	var divide = 1;
+	var maxScale = 0;
+	var minScale = 0;
+	
+	if (max-min < 10) {
+		maxScale = Math.ceil(max) + 1;
+		minScale = Math.floor(min) - 1;
+		divide = 1;
+	} else if (max-min < 100) {
+		maxScale = Math.ceil(max/10)*10;
+		minScale = Math.floor(min/10)*10;
+		divide = 10;
+	} else if (max-min < 500) {
+		maxScale = Math.ceil(max/100)*100;
+		minScale = Math.floor(min/100)*100;
+		divide = 50;
+	} else {
+		var k = 250;
+		maxScale = Math.ceil(max/k)*k;
+		minScale = Math.floor(min/k)*k;
+		divide = k;
+	}
+	
+	//console.log(minScale, maxScale, divide);
+	
+	var containerHeight = container.height();
+	var containerWidth = container.width();
+	var dividersCount = 1 + (maxScale-minScale)/divide;
+	var dividerHeight = containerHeight/dividersCount;
+	for (var i=0; i<dividersCount; i++) {
+		var divider = $('<div>', {'class': 'cmmrm-divider'});
+		
+		if(CMMRM_Map_Settings.lengthUnits == "feet") {
+			var textval = (minScale + divide*i) * 3.28084;
+		} else {
+			var textval = minScale + divide*i;
+		}
+
+		divider.text(textval.toFixed(0));
+		container.append(divider);
+		divider.css('bottom', (dividerHeight*i) + 'px');
+	}
+	
+	container.css('overflow', 'hidden');
+	
+	var leftMargin = this.getChartLeftMargin();
+	var colWidth = (container.width() - leftMargin) / elevations.length;
+	//console.log('colWidth', colWidth);
+	
+	for (var i=0; i<elevations.length; i++) {
+		var col = $('<div>', {'class': 'cmmrm-col'});
+		container.append(col);
+		var colBackground = $('<div>', {'class': 'cmmrm-col-bg'});
+		col.append(colBackground);
+		var h = (elevations[i].elevation - minScale) / (maxScale-minScale) * (containerHeight - dividerHeight);
+		var left = (leftMargin + colWidth*i);
+		var nextLeft = (leftMargin + colWidth*(i+1));
+		var width = Math.round(nextLeft - left);
+		//width = Math.ceil(colWidth);
+		col.css('width', width + 'px');
+		col.css('left', Math.round(left) + 'px');
+		col.css('height', containerHeight + 'px');
+		colBackground.css('height', h +'px');
+		colBackground.css('width', Math.ceil(colWidth) +'px')
+		if (CMMRM_Map_Settings.elevationGraphColorAsPathColor == '1') {
+			colBackground.css('background', this.getPathColor());
+		} else {
+			colBackground.css('background', this.getSlopeDownwardColor());
+		}
+		col.data('lat', elevations[i].location.lat());
+		col.data('long', elevations[i].location.lng());
+		col.data('alt', elevations[i].elevation);
+	}
+	
+	this.initMouseOverCrosshair(container);
+	this.initCustomChartMapEvents(container);
+	
+};
+
+CMMRM_ElevationGraph.prototype.initCustomChartMapEvents = function(container) {
+	
+	var $ = jQuery;
+	var googleMapObj = this.widget.map.map;
+	var that = this;
+	
+	// --------------------------------------------------------------
+	// Show dot icon on the map  when mouse is over the graph
+	
+	var marker = new google.maps.Marker({
+		icon: 'https://maps.gstatic.com/mapfiles/dd-via.png',
+		draggable: false,
+	});
+	
+	var containerHeight = container.height();
+	var horizontalCursor = container.find('.cmmrm-horizontal-cursor');
+	
+	var cols = container.find('.cmmrm-col');
+	
+	var calculateDistanceForColumns = function(startIndex, stopIndex) {
+		var distanceFromStart = 0;
+		var lastCoords = null;
+		for (var i=startIndex; i<=stopIndex; i++) {
+			var currentCol = $(cols[i]);
+			var coords = new google.maps.LatLng(currentCol.data('lat'), currentCol.data('long'));
+			if (lastCoords === null) {
+				lastCoords = coords;
+			} else {
+				distanceFromStart += CMMRM_GoogleMap.prototype.calculateDistance(lastCoords, coords);
+				lastCoords = coords;
+			}
+			//if (cols[i] == col[0]) break;
+		}
+		return distanceFromStart;
+	};
+	
+	var distanceCalculatedFromGraph = calculateDistanceForColumns(0, cols.length-1);
+	var distanceOriginal = container.parents('.cmmrm-elevation-graph').data('distance');
+	var distanceFactor = distanceOriginal/distanceCalculatedFromGraph;
+	//console.log(distanceCalculatedFromGraph, distanceOriginal, distanceFactor, container);
+	
+	container.find('.cmmrm-col').mouseover(function(e) {
+		var col = $(this);
+		marker.setMap(googleMapObj);
+		//console.log(col.data('lat'), col.data('long'));
+		marker.setPosition(new google.maps.LatLng(col.data('lat'), col.data('long')));
+		
+		// Set altitude label
+		var text = '';
+		if(CMMRM_Map_Settings.lengthUnits == "feet") {
+			var num = col.data('alt')/CMMRM_Map_Settings.feetToMeter;
+			if ( num > CMMRM_Map_Settings.feetInMile) {
+				text = (num/CMMRM_Map_Settings.feetInMile).toFixed(3) +' miles';
+			} else {
+				text = (num).toFixed(3) + ' ft';
+			}
+		} else {
+			text = (col.data('alt')).toFixed(3) + ' m';
+			if (col.data('alt') > 1000) {
+				//text = Math.round(col.data('alt')/1000) + ' km';
+				text = (col.data('alt')/1000).toFixed(3) + ' km';
+			}
+		}
+		text = CMMRM_Map_Settings.elevation_graph_alt_tooltip.replace('%s', text);
+		var alttext = text;
+		var label = that.getAltitudeLabel(container, text);
+		var parentOffset = container.offset();
+		var relX = e.pageX - parentOffset.left;
+		var relY = e.pageY - parentOffset.top;
+		var left = parseInt(col.css('left'));
+		if (left + label.width() + 18 > container.width()) {
+			left = left - label.width() - 18;
+		}
+		var bottom = col.find('.cmmrm-col-bg').height();
+		label.css('left', left + 'px').css('bottom', bottom + 'px').hide();
+		
+		// Set horizontal cursor Y position
+		horizontalCursor.css('bottom', bottom + 'px').show();
+		
+		var colIndex = 0;
+		for (var i=0; i<cols.length; i++) {
+			if (typeof col != "undefined" && cols[i] === col[0]) {
+				colIndex = i;
+				break;
+			}
+		}
+		
+		// Set distance label
+		var distanceFromStart = calculateDistanceForColumns(0, colIndex) * distanceFactor;
+		
+		var text;
+		if(CMMRM_Map_Settings.lengthUnits == "feet") {
+			var num = distanceFromStart/CMMRM_Map_Settings.feetToMeter;
+			if ( num > CMMRM_Map_Settings.feetInMile) {
+				text = (num/CMMRM_Map_Settings.feetInMile).toFixed(3) +' miles';
+			} else {
+				text = (num).toFixed(3) + ' ft';
+			}
+		} else {
+			if (distanceFromStart > 1000) {
+				//text = Math.round(distanceFromStart/1000) + ' km';
+				text = (distanceFromStart/1000).toFixed(3) + ' km';
+			} else {
+				//text = Math.round(distanceFromStart) + ' m';
+				text = (distanceFromStart).toFixed(3) + ' m';
+			}
+		}
+		text = CMMRM_Map_Settings.elevation_graph_dist_from_start_tooltip.replace('%s', text);
+		var label = that.getDistanceLabel(container, alttext+'<br>'+text);
+		var left = parseInt(col.css('left'));
+		if (left + label.width() + 18 > container.width()) {
+			left = left - label.width() - 18;
+		}
+		label.css('left', left + 'px').css('bottom', bottom + 'px');
+		//console.log('distanceFromStart = ', distanceFromStart);
+	});
+	
+	container.mouseleave(function() {
+		marker.setMap(null);
+		var altLabel = that.getAltitudeLabel(container);
+		altLabel.hide();
+		var distLabel = that.getDistanceLabel(container);
+		distLabel.hide();
+	});
+	
+	// ------------------------------------------------------------------------------------------------------
+	// Show horizontal line on the graph when mouse is over the polyline (20px margin outline) on the map
+	
+	var polylinesLegs = this.widget.routeRenderer.polylines;
+	//console.log(polylinesLegs);
+	for (var i=0; i<polylinesLegs.length; i++) {
+		var leg = polylinesLegs[i];
+		
+		var polylineOutline = new google.maps.Polyline({
+				path: leg.getPath(),
+				strokeColor: 'transparent',
+				strokeWeight: 20,
+				opacity: 0.1,
+				map: that.widget.map.map,
+				zIndex: 5,
+				//icons: icons
+			});
+		
+		google.maps.event.addListener(polylineOutline, 'mousemove', function(h) {
+			
+			var latlng = h.latLng;
+			var hc = container.find('.cmmrm-horizontal-cursor');
+			var vc = container.find('.cmmrm-vertical-cursor');
+			var index = that.findClosestResult(latlng);
+			if (index) {
+				var col = container.find('.cmmrm-col:nth-child('+ (index+1) +')');
+				var left = parseInt(col.css('left'));
+				var bottom = col.find('.cmmrm-col-bg').height();
+				vc.css('left', left + 'px').show();
+				hc.css('bottom', bottom + 'px').show();
+
+				var text = '';
+				if(CMMRM_Map_Settings.lengthUnits == "feet") {
+					var num = col.data('alt')/CMMRM_Map_Settings.feetToMeter;
+					if ( num > CMMRM_Map_Settings.feetInMile) {
+						text = (num/CMMRM_Map_Settings.feetInMile).toFixed(3) +' miles';
+					} else {
+						text = (num).toFixed(3) + ' ft';
+					}
+				} else {
+					text = (col.data('alt')).toFixed(3) + ' m';
+					if (col.data('alt') > 1000) {
+						//text = Math.round(col.data('alt')/1000) + ' km';
+						text = (col.data('alt')/1000).toFixed(3) + ' km';
+					}
+				}
+
+				text = CMMRM_Map_Settings.elevation_graph_alt_tooltip.replace('%s', text);
+				var alttext = text;
+				var label = that.getAltitudeLabel(container, text);
+				if (left + label.width() + 18 > container.width()) {
+					left = left - label.width() - 18;
+				}
+				label.css('left', left + 'px').css('bottom', bottom + 'px').hide();
+			}
+
+			var colIndex = 0;
+			for (var i=0; i<cols.length; i++) {
+				if (cols[i] === col[0]) {
+					colIndex = i;
+					break;
+				}
+			}
+			
+			// Set distance label
+			var distanceFromStart = calculateDistanceForColumns(0, colIndex) * distanceFactor;
+			
+			var text;
+			if(CMMRM_Map_Settings.lengthUnits == "feet") {
+				var num = distanceFromStart/CMMRM_Map_Settings.feetToMeter;
+				if ( num > CMMRM_Map_Settings.feetInMile) {
+					//text = Math.round(num/CMMRM_Map_Settings.feetInMile) +' miles';
+					text = (num/CMMRM_Map_Settings.feetInMile).toFixed(3) +' miles';
+				} else {
+					//text = Math.floor(num) + ' ft';
+					text = (num).toFixed(3) + ' ft';
+				}
+			} else {
+				if (distanceFromStart > 1000) {
+					//text = Math.round(distanceFromStart/1000) + ' km';
+					text = (distanceFromStart/1000).toFixed(3) + ' km';
+				} else {
+					//text = Math.round(distanceFromStart) + ' m';
+					text = (distanceFromStart).toFixed(3) + ' m';
+				}
+			}
+			text = CMMRM_Map_Settings.elevation_graph_dist_from_start_tooltip.replace('%s', text);
+			var label = that.getDistanceLabel(container, alttext+'<br>'+text);
+			var left = parseInt(col.css('left'));
+			if (left + label.width() + 18 > container.width()) {
+				left = left - label.width() - 18;
+			}
+			label.css('left', left + 'px').css('bottom', bottom + 'px');
+			//console.log('distanceFromStart = ', distanceFromStart);
+			
+			//container.find('.cmmrm-col.current').removeClass('current');
+			//var latlng = h.latLng;
+			//var index = that.findClosestResult(latlng);
+			//if (index) container.find('.cmmrm-col:nth-child('+ (index+1) +')').addClass('current');
+			
+		});
+		var removeCrosshair = function(e) {
+			var hc = container.find('.cmmrm-horizontal-cursor');
+			var vc = container.find('.cmmrm-vertical-cursor');
+			hc.hide();
+			vc.hide();
+			that.getAltitudeLabel(container).hide();
+			//container.find('.cmmrm-col.current').removeClass('current');
+		};
+		google.maps.event.addListener(polylineOutline, 'mouseleave', removeCrosshair);
+		google.maps.event.addListener(this.widget.map.map, 'mouseout', removeCrosshair);
+		
+	}
+	
+	this.markSlopes(container);
+};
+
+CMMRM_ElevationGraph.prototype.markSlopes = function(container) {
+	
+	if (!this.routeModel.isSlopesShowingEnabled()) return;
+	
+	var $ = jQuery;
+	
+	var cols = container.find('.cmmrm-col');
+	
+	var calculateSlope = function(coords1, alt1, coords2, alt2) {
+		var run = CMMRM_GoogleMap.prototype.calculateDistance(coords1, coords2);
+		var rise = alt2 - alt1;
+		return Math.round(rise/run * 100);
+	};
+	var calculateSlopeForCols = function(col1, col2) {
+		var coords1 = new google.maps.LatLng(col1.data('lat'), col1.data('long'));
+		var alt1 = col1.data('alt');
+		var coords2 = new google.maps.LatLng(col2.data('lat'), col2.data('long'));
+		var alt2 = col2.data('alt');
+		return calculateSlope(coords1, alt1, coords2, alt2);
+	};
+	var calculateSlopeByIndex = function(startIndex, stopIndex) {
+		return calculateSlopeForCols($(cols[startIndex]), $(cols[stopIndex]));
+	};
+	var downSlopeColor = this.routeModel.getSlopeUpwardColor();
+	var neuralColor = this.getPathColor();
+	var markSlope = function(startIndex, stopIndex, slope) {
+		for (var i=startIndex; i<=stopIndex; i++) {
+			var b = (slope > 0 ? 85 : 115);
+			if (CMMRM_Map_Settings.elevationGraphColorAsPathColor == '1') {
+				$('.cmmrm-col-bg', cols[i]).css('filter', 'brightness('+ b +'%)');
+			} else {
+				if(b == 85) {
+					$('.cmmrm-col-bg', cols[i]).css('background', downSlopeColor);
+				} else {
+					$('.cmmrm-col-bg', cols[i]).css('background', neuralColor);
+				}
+			}
+		}
+		var label = $('<div/>', {"class": 'cmmrm-slope-label'});
+		label.text(slope + '%');
+		if(CMMRM_Map_Settings.elevationGraphLabel == '1') {
+			$(cols[startIndex]).append(label);
+		}
+		label.css('left', Math.floor((stopIndex - startIndex)/2 - 10) + 'px');
+		label.addClass(slope > 0 ? 'cmmrm-slope-positive' : 'cmmrm-slope-negative');
+	}
+	
+	var minSlope = this.routeModel.getSlopeMinValue();
+	var minColumnsNumber = this.routeModel.getSlopeMinWidth();
+	var fitlerFalseNegative = true;
+	
+	//var minimums = [];
+	//var maximums = [];
+	
+	var curMin = null;
+	var curMax = null;
+	for (var i=1; i<cols.length-1; i++) {
+		var col = $(cols[i]);
+		var leftAlt = $(cols[i-1]).data('alt');
+		var llAlt = (i>1 ? $(cols[i-2]).data('alt') : null); // left left alt
+		var alt = col.data('alt');
+		var rightAlt = $(cols[i+1]).data('alt');
+		var rrAlt = (i<cols.length-2 ? $(cols[i+2]).data('alt') : null); // right right alt
+		var isMin = false;
+		var isMax = false;
+		if (leftAlt < alt && alt > rightAlt) {
+			//maximums.push(i);
+			isMax = true;
+			// but
+			if (fitlerFalseNegative && llAlt != null && rrAlt != null && ((llAlt > leftAlt && leftAlt > rightAlt && rightAlt > rrAlt)
+					|| (llAlt < leftAlt && leftAlt < rightAlt && rightAlt < rrAlt))) {
+				// it's false positive
+				//console.log('false positive max', i)
+				//col.css('background', 'orange');
+				isMax = false;
+			} else {
+				//$('.cmmrm-col-bg', cols[i]).css('background', 'red');
+			}
+		} else if (leftAlt > alt && alt < rightAlt) {
+			//minimums.push(i);
+			isMin = true;
+			//$('.cmmrm-col-bg', cols[i])
+			//.css('background-color', 'black');
+			// but
+			if (fitlerFalseNegative && llAlt != null && rrAlt != null && ((llAlt > leftAlt && leftAlt > rightAlt && rightAlt > rrAlt)
+					|| (llAlt < leftAlt && leftAlt < rightAlt && rightAlt < rrAlt))) {
+				// it's false positive
+				isMin = false;
+				//$('.cmmrm-col-bg', cols[i]).css('background', 'black');
+			} else {
+				//col.css('background', 'blue');
+			}
+		}
+		if (isMin) {
+			curMin = i;
+			if (curMin - curMax >= minColumnsNumber) {
+				var slope = calculateSlopeByIndex(curMax, curMin);
+				//console.log('slope for min = ', slope);
+				if (Math.abs(slope) >= minSlope) {
+					markSlope(curMax, curMin, slope);
+				}
+			}
+			//curMax = null;
+		}
+		else if (isMax) {
+			curMax = i;
+			if (curMax - curMin >= minColumnsNumber) {
+				var slope = calculateSlopeByIndex(curMin, curMax);
+				//console.log('slope for max = ', slope);
+				if (slope >= minSlope) {
+					markSlope(curMin, curMax, slope);
+				}
+			}
+			//curMin = null;
+		}
+	}
+};
+
+CMMRM_ElevationGraph.prototype.getAltitudeLabel = function(container, altitude) {
+	var className = 'cmmrm-altitude-label';
+	var div = container.find('.' + className);
+	if (div.length == 0) {
+		div = jQuery('<div>', {'class': className});
+		container.append(div);
+	} else {
+		div.show();
+	}
+	if (typeof altitude == 'string') {
+		div.html(altitude);
+	}
+	return div;
+};
+
+CMMRM_ElevationGraph.prototype.getDistanceLabel = function(container, distance) {
+	var className = 'cmmrm-distance-label';
+	var div = container.find('.' + className);
+	if (div.length == 0) {
+		div = jQuery('<div>', {'class': className});
+		container.append(div);
+	} else {
+		div.show();
+	}
+	if (typeof distance == 'string') {
+		div.html(distance);
+	}
+	return div;
+};
+
+CMMRM_ElevationGraph.prototype.getGraphCanvasContainer = function() {
+	return jQuery(this.widget.getWidgetElement()).find('.cmmrm-elevation-graph-canvas');
+};
+
+CMMRM_ElevationGraph.prototype.getGraphWrapper = function() {
+	return jQuery(this.widget.getWidgetElement()).find('.cmmrm-elevation-graph');
+};
+
+CMMRM_ElevationGraph.prototype.removeElevationGraph = function() {
+	this.getGraphCanvasContainer().html('');
+};
+
+CMMRM_ElevationGraph.prototype.getMaxElevation = function() {
+	return this.maxElevation;
+};
+
+CMMRM_ElevationGraph.prototype.getMinElevation = function() {
+	return this.minElevation;
+};
+
+CMMRM_ElevationGraph.prototype.getElevationGain = function() {
+	return this.elevationGain;
+};
+
+CMMRM_ElevationGraph.prototype.getElevationDescent = function() {
+	return this.elevationDescent;
+};
+
+CMMRM_ElevationGraph.prototype.findClosestResult = function(coords) {
+	var minDistance = -1;
+	var closestResultIndex = null;
+	for (var i=0; i<this.results.length; i++) {
+		var result = this.results[i];
+		var d = CMMRM_GoogleMap.prototype.calculateDistance(coords, result.location);
+		if (minDistance == -1 || d < minDistance) {
+			minDistance = d;
+			closestResultIndex = i;
+		}
+	}
+	return closestResultIndex;
+};
+
+CMMRM_ElevationGraph.prototype.initMouseOverCrosshair = function(container) {
+	
+	var $ = jQuery;
+	
+	var containerWidth = container.width();
+	var containerHeight = container.height();
+	var leftMargin = this.getChartLeftMargin();
+	
+	var horizontalCursor = $('<div>', {'class': 'cmmrm-horizontal-cursor'});
+	container.append(horizontalCursor);
+	horizontalCursor.css('left', leftMargin + 'px');
+	horizontalCursor.css('width', containerWidth + 'px');
+	
+	var verticalCursor = $('<div>', {'class': 'cmmrm-vertical-cursor'});
+	container.append(verticalCursor);
+	verticalCursor.css('height', containerHeight + 'px');
+    
+	container.mousemove(function(e) {
+		//var obj = $(this);
+		var parentOffset = container.offset();
+		var relX = e.pageX - parentOffset.left;
+		var relY = e.pageY - parentOffset.top;
+		//horizontalCursor.css('bottom', (containerHeight-relY+1) + 'px').show();
+		verticalCursor.css('left', (relX-3) + 'px').show();
+	});
+	container.mouseleave(function() {
+		horizontalCursor.hide();
+		verticalCursor.hide();
+	});
+	
+};
+
+CMMRM_ElevationGraph.prototype.getTravelMode = function() {
+	return this.routeModel.getTravelMode();
+};
+
+CMMRM_ElevationGraph.prototype.getPathColor = function() {
+	return this.routeModel.getPathColor();
+};
+
+CMMRM_ElevationGraph.prototype.getSlopeDownwardColor = function() {
+	if(typeof this.routeModel != "undefined") {
+		return this.routeModel.getSlopeDownwardColor();
+	} else {
+		return '#3377FF';
+	}
+};
+
+CMMRM_ElevationGraph.prototype.getSlopeUpwardColor = function() {
+	if(typeof this.routeModel != "undefined") {
+		return this.routeModel.getSlopeUpwardColor();
+	} else {
+		return '#3377FF';
+	}
+};
+
+CMMRM_ElevationGraph.prototype.getPathString = function() {
+	return this.routeModel.getWaypointsString();
+};
+
+CMMRM_ElevationGraph.prototype.getWaypointsCoords = function() {
+	return this.routeModel.getWaypointsCoords();
+};
+
+CMMRM_ElevationGraph.prototype.getChartLeftMargin = function() {
+	return 30;
+};
+
+CMMRM_ElevationGraph.prototype.calculateSurfaceDistance = function(elevationResponse) {
+	var distance = 0;
+	for (var i=1; i<elevationResponse.results.length; i++) {
+		var p = elevationResponse.results[i];
+		var last = elevationResponse.results[i-1];
+		distance += CMMRM_GoogleMap.prototype.calculateSurfaceDistance(p.location, p.elevation, last.location, last.elevation);
+	}
+	return distance;
+};

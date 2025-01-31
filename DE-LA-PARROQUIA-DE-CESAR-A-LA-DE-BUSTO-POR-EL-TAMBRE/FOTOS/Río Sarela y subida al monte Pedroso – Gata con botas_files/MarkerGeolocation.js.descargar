@@ -1,0 +1,169 @@
+CMMRM_MarkerGeolocation.prototype = new google.maps.OverlayView();
+
+function CMMRM_MarkerGeolocation(mapObj, position, accuracy, icon) {
+	var that = this;
+	this.mapObj = mapObj;
+	var map = mapObj.map;
+	this.accuracy = accuracy;
+	this.set('position', position);
+	this.setMap(map);
+	map.addListener('zoom_changed', function() {
+		that.updateAccuracyDrawing();
+	});
+	this._createContainer();
+};
+
+CMMRM_MarkerGeolocation.prototype._createContainer = function() {
+	var that = this;
+	var container = document.createElement('div');
+	container.style.zIndex = 1000;
+	this.set('container', container);
+	return container;
+};
+
+/**
+ * onAdd is called when the map's panes are ready and the overlay has been added
+ * to the map.
+ */
+CMMRM_MarkerGeolocation.prototype.onAdd = function() {
+
+	var dotBgcolor = CMMRM_Map_Settings.geolocationIconBgcolor;
+	var dotWidth = CMMRM_Map_Settings.geolocationIconWidth;
+	var dotHeight = CMMRM_Map_Settings.geolocationIconHeight;
+	
+	var container = this.getContainer();
+	container.style.position = 'absolute';
+	container.draggable = false;
+	var markerHTML = '<div class="cmmrm-marker-geolocation-dot" style="background:'+dotBgcolor+';width:'+dotWidth+'px;height:'+dotHeight+'px;"><div class="cmmrm-marker-geolocation-dot-reflection"></div></div><div class="cmmrm-marker-geolocation-radius"></div>';
+	container.innerHTML = '<div class="cmmrm-marker-geolocation">'+ markerHTML +'</div>';
+	this.getPanes().overlayImage.appendChild(container);
+};
+
+CMMRM_MarkerGeolocation.prototype.draw = function() {
+	var pos = this.getProjection().fromLatLngToDivPixel(this.get('position'));
+	this.get('container').style.left = (pos.x -10) + 'px';
+	this.get('container').style.top = (pos.y - 10) + 'px';
+	this.updateAccuracyDrawing();
+	return this;
+};
+
+CMMRM_MarkerGeolocation.prototype.onRemove = function() {
+	var container = this.get('container');
+	if (container) {
+		container.parentNode.removeChild(container);
+	}
+	this.set('container', null)
+};
+
+CMMRM_MarkerGeolocation.prototype.getPosition = function() {
+	return this.get('position');
+};
+
+CMMRM_MarkerGeolocation.prototype.setPosition = function(pos) {
+	this.set('position', pos);
+	this.draw();
+	google.maps.event.trigger(this, 'positionUpdated');
+	return this;
+};
+
+CMMRM_MarkerGeolocation.prototype.getContainer = function() {
+	var container = this.get('container');
+	if (!container) {
+		container = this._createContainer();
+	}
+	return container;
+};
+
+CMMRM_MarkerGeolocation.prototype.updateAccuracy = function(meters) {
+	this.accuracy = meters;
+	this.updateAccuracyDrawing();
+};
+
+CMMRM_MarkerGeolocation.prototype.updateAccuracyDrawing = function() {
+	var DOT_DIV_WIDTH = CMMRM_Map_Settings.geolocationIconWidth;
+	var container = this.getContainer();
+	if (!container || !container.children.length || !container.children[0].children) return;
+	//console.log(container);
+	var radiusDiv = container.children[0].children[1];
+	var radiusPixels = this.getRadiusInPixels(this.accuracy);
+	//console.log('radiusPixels', radiusPixels);
+	if (radiusPixels < DOT_DIV_WIDTH) {
+		radiusDiv.style.display = 'none';
+	} else {
+		radiusDiv.style.display = 'block';
+		radiusDiv.style.width = radiusPixels + 'px';
+		radiusDiv.style.height = radiusPixels + 'px';
+		var newOffset = (radiusPixels-DOT_DIV_WIDTH)/2;
+		//console.log('newOffset', newOffset)
+		radiusDiv.style.left = '-' + newOffset + 'px';
+		radiusDiv.style.top = '-' + newOffset + 'px';
+		radiusDiv.style.zIndex = 1000;
+	}
+};
+
+CMMRM_MarkerGeolocation.prototype.getRadiusInPixels = function(desiredRadiusInInMeters) {
+	
+	var TILE_SIZE = 256;
+
+	function MercatorProjection() {
+		this.pixelOrigin_ = new google.maps.Point(TILE_SIZE / 2, TILE_SIZE / 2);
+		this.pixelsPerLonDegree_ = TILE_SIZE / 360;
+		this.pixelsPerLonRadian_ = TILE_SIZE / (2 * Math.PI);
+	}
+
+	MercatorProjection.prototype.fromLatLngToPoint = function (latLng, opt_point) {
+		var me = this;
+		var point = opt_point || new google.maps.Point(0, 0);
+		var origin = me.pixelOrigin_;
+
+		point.x = origin.x + latLng.lng() * me.pixelsPerLonDegree_;
+
+		// NOTE(appleton): Truncating to 0.9999 effectively limits latitude to
+		// 89.189.  This is about a third of a tile past the edge of the world
+		// tile.
+		var siny = bound(Math.sin(degreesToRadians(latLng.lat())), - 0.9999, 0.9999);
+		point.y = origin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) * -me.pixelsPerLonRadian_;
+		return point;
+	};
+
+	MercatorProjection.prototype.fromPointToLatLng = function (point) {
+		var me = this;
+		var origin = me.pixelOrigin_;
+		var lng = (point.x - origin.x) / me.pixelsPerLonDegree_;
+		var latRadians = (point.y - origin.y) / -me.pixelsPerLonRadian_;
+		var lat = radiansToDegrees(2 * Math.atan(Math.exp(latRadians)) - Math.PI / 2);
+		return new google.maps.LatLng(lat, lng);
+	};
+	
+	function bound(value, opt_min, opt_max) {
+		if (opt_min !== null) value = Math.max(value, opt_min);
+		if (opt_max !== null) value = Math.min(value, opt_max);
+		return value;
+	}
+
+	function degreesToRadians(deg) {
+		return deg * (Math.PI / 180);
+	}
+
+	function radiansToDegrees(rad) {
+		return rad / (Math.PI / 180);
+	}
+	
+	var map = this.getMap();
+	var numTiles = 1 << map.getZoom();
+	var center = map.getCenter();
+	var moved = google.maps.geometry.spherical.computeOffset(center, 10000, 90); /*1000 meters to the right*/
+	var projection = new MercatorProjection();
+	var initCoord = projection.fromLatLngToPoint(center);
+	var endCoord = projection.fromLatLngToPoint(moved);
+	var initPoint = new google.maps.Point(
+		initCoord.x * numTiles,
+		initCoord.y * numTiles);
+	var endPoint = new google.maps.Point(
+		endCoord.x * numTiles,
+		endCoord.y * numTiles);
+	var pixelsPerMeter = (Math.abs(initPoint.x-endPoint.x))/10000.0;
+	var totalPixelSize = Math.floor(desiredRadiusInInMeters*pixelsPerMeter);
+	//console.log(totalPixelSize);
+	return totalPixelSize;
+}

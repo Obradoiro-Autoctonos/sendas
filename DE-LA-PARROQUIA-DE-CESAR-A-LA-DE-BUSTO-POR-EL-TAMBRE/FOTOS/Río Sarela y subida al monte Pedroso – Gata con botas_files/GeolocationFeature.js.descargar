@@ -1,0 +1,67 @@
+function CMMRM_GeolocationFeature(widget) {
+	
+	this.widget = widget;
+	this.userPositionMarker = null;
+	this.position = null;
+	
+	var that = this;
+	
+	// testing:
+//	setTimeout(function() {
+//		console.log('temp geolocation set position');
+//		var pos = {coords: {latitude: 54.352789, longitude: 18.531435, accuracy: 50}};
+//		that.position = pos;
+//		jQuery(that).trigger('GeolocationFeature:updatePosition', [pos]);
+//		that.showUserPositionMarker(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
+//	}, 1000);
+	
+	this.geolocationWatchPosition(function(pos) {
+		that.position = pos;
+		that.showUserPositionMarker(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
+		jQuery(that).trigger('GeolocationFeature:updatePosition', [pos]);
+	}, null, true);
+	
+}
+
+CMMRM_GeolocationFeature.prototype.geolocationWatchPosition = function(callback, errorCallback, highAccuracy) {
+	if ("geolocation" in navigator) {
+		if (typeof highAccuracy != 'boolean') highAccuracy = true;
+		var geo_options = {
+		  enableHighAccuracy: highAccuracy, 
+		  maximumAge        : 1000 * 60 * 1, // 1 minute
+		  timeout           : 1000 * 60 * 10 // 10 minutes
+		};
+		errorCallback = function(err) {
+			//console.log(err);
+			if (CMMRM_Map_Settings.showGeolocationErrors == '1') {
+				window.CMMRM.Utils.toast('Geolocation error: [' + err.code + '] ' + err.message, null, Math.ceil(err.message.length/5));
+			}
+		};
+		return navigator.geolocation.watchPosition(callback, errorCallback, geo_options);
+	}
+};
+
+CMMRM_GeolocationFeature.prototype.showUserPositionMarker = function(lat, long, accuracy) {
+	var pos = new google.maps.LatLng(lat, long);
+	if (!this.userPositionMarker) {
+		this.userPositionMarker = new CMMRM_MarkerGeolocation(this.widget.map, pos, accuracy, CMMRM_Map_Settings.geolocationIcon);
+	} else {
+		this.userPositionMarker.setPosition(pos);
+		this.userPositionMarker.updateAccuracy(accuracy);
+	}
+};
+
+CMMRM_GeolocationFeature.prototype.initMapCenterToUserPosition = function() {
+	var that = this;
+	var centerMap = function(ev, pos) {
+		//console.log('updateposition', pos);
+		var defaultCoords = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+		that.widget.map.center = function() {
+			that.widget.map.map.panTo(defaultCoords);
+			that.widget.map.map.setZoom(parseInt(that.widget.getDefaultZoom()));
+		};
+		that.widget.map.center();
+		jQuery(that).unbind('GeolocationFeature:updatePosition', centerMap);
+	};
+	jQuery(that).on('GeolocationFeature:updatePosition', centerMap);
+};

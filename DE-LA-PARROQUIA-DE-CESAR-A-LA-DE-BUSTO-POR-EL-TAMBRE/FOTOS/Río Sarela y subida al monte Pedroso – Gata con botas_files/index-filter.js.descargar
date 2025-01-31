@@ -1,0 +1,20 @@
+jQuery(function($) {
+	
+	var initHandlers = function() {
+	
+		$('.cmmrm-filter select', this).change(function() {
+			var filter = $(this);
+			var form = filter.parents('form').first();
+			if (form.length > 0) {
+				form.submit();
+			} else {
+				location.href = filter.data('url');
+			}
+		});
+		
+	};
+	
+	initHandlers.apply($('body'));
+	$('body').bind('CMMRM.initHandlers', initHandlers);
+	
+});
