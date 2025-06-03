@@ -1,0 +1,1061 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxdata="http://www.cluetrust.com/XML/GPXDATA/1/0" xmlns:rmc="urn:net:trekbuddy:1.0:nmea:rmc" xmlns="http://www.topografix.com/GPX/1/1" creator="QMapShack 1.16.0 http://www.qlandkarte.org/" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd http://www.garmin.com/xmlschemas/WaypointExtension/v1 http://www.garmin.com/xmlschemas/WaypointExtensionv1.xsd http://www.qlandkarte.org/xmlschemas/v1.1 http://www.qlandkarte.org/xmlschemas/v1.1/ql-extensions.xsd http://www.cluetrust.com/XML/GPXDATA/1/0 http://www.cluetrust.com/Schemas/gpxdata10.xsd" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:tp1="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:ql="http://www.qlandkarte.org/xmlschemas/v1.1">
+ <metadata>
+  <name>Ruta Sarela Abaixo</name>
+  <time>2023-02-22T19:14:43.456Z</time>
+ </metadata>
+ <wpt lat="42.88123298" lon="-8.55201998">
+  <ele>223</ele>
+  <name>Capela do Carme de Abaixo</name>
+  <cmt>Capela do Carme de Abaixo</cmt>
+  <desc>Capela do Carme de Abaixo</desc>
+  <extensions>
+   <ql:key>55b77739411d58aa518d26d90141beb1</ql:key>
+   <ql:flags>0</ql:flags>
+   <ql:bubble yoff="-150" width="300" xoff="-320"/>
+   <wptx1:WaypointExtension/>
+  </extensions>
+ </wpt>
+ <wpt lat="42.88287530" lon="-8.55452449">
+  <ele>221</ele>
+  <name>Curtidoiro da Ponte do Rueiro de Figueiriñas</name>
+  <cmt>Curtidoiro da Ponte do Rueiro de Figueiriñas</cmt>
+  <desc>Curtidoiro da Ponte do Rueiro de Figueiriñas</desc>
+  <extensions>
+   <ql:key>d50d5938d85633ef88aed2df5450daf3</ql:key>
+   <ql:flags>0</ql:flags>
+   <ql:bubble yoff="-150" width="300" xoff="-320"/>
+   <wptx1:WaypointExtension/>
+  </extensions>
+ </wpt>
+ <wpt lat="42.87930100" lon="-8.56043100">
+  <ele>0</ele>
+  <name>Fin de Ruta circular Sarela curta</name>
+  <cmt>Elevación: 206 m</cmt>
+  <desc>Elevación: 206 m</desc>
+  <extensions>
+   <ql:key>6d96a350eed1ed312206449c4fbeffe3</ql:key>
+   <ql:flags>0</ql:flags>
+   <ql:bubble yoff="-150" width="300" xoff="-320"/>
+   <wptx1:WaypointExtension/>
+  </extensions>
+ </wpt>
+ <wpt lat="42.88212682" lon="-8.55361539">
+  <ele>223</ele>
+  <name>Lavadoiro de Bar de Abaixo</name>
+  <cmt>Lavadoiro de Bar de Abaixo</cmt>
+  <desc>Lavadoiro de Bar de Abaixo</desc>
+  <extensions>
+   <ql:key>8a59b271e53891ac74bddefd4564f105</ql:key>
+   <ql:flags>0</ql:flags>
+   <ql:bubble yoff="-150" width="300" xoff="-320"/>
+   <wptx1:WaypointExtension/>
+  </extensions>
+ </wpt>
+ <wpt lat="42.88339937" lon="-8.55021903">
+  <ele>224</ele>
+  <name>Parque de Galeras</name>
+  <cmt>Parque de Galeras</cmt>
+  <desc>Parque de Galeras</desc>
+  <extensions>
+   <ql:key>acc5d33f32757002b276aa78555a69d6</ql:key>
+   <ql:flags>0</ql:flags>
+   <ql:bubble yoff="-150" width="300" xoff="-320"/>
+   <wptx1:WaypointExtension/>
+  </extensions>
+ </wpt>
+ <wpt lat="42.88487694" lon="-8.54976342">
+  <ele>226</ele>
+  <name>Ponte de Asén</name>
+  <cmt>Ponte de Asén</cmt>
+  <desc>Ponte de Asén</desc>
+  <extensions>
+   <ql:key>bf753771de779b77bc8f7be1f76d7278</ql:key>
+   <ql:flags>0</ql:flags>
+   <ql:bubble yoff="-150" width="300" xoff="-320"/>
+   <wptx1:WaypointExtension/>
+  </extensions>
+ </wpt>
+ <wpt lat="42.87915656" lon="-8.56050906">
+  <ele>189</ele>
+  <name>Ponte Sarela</name>
+  <cmt>Ponte Sarela</cmt>
+  <desc>Ponte Sarela</desc>
+  <extensions>
+   <ql:key>11218afeafa32dab4f2cba97a967a538</ql:key>
+   <ql:flags>0</ql:flags>
+   <ql:bubble yoff="-150" width="300" xoff="-320"/>
+   <wptx1:WaypointExtension/>
+  </extensions>
+ </wpt>
+ <wpt lat="42.88308009" lon="-8.55738832">
+  <ele>209</ele>
+  <name>Pontella da Ribeira de San Lourenzo</name>
+  <cmt>Pontella da Ribeira de San Lourenzo</cmt>
+  <desc>Pontella da Ribeira de San Lourenzo</desc>
+  <extensions>
+   <ql:key>c7d26a1e189cd98f1ca40715f563340e</ql:key>
+   <ql:flags>0</ql:flags>
+   <ql:bubble yoff="-150" width="300" xoff="-320"/>
+   <wptx1:WaypointExtension/>
+  </extensions>
+ </wpt>
+ <trk>
+  <name>Ruta Sarela</name>
+  <extensions>
+   <ql:key>f57967faa7c9384f3b7d5c41aacb7151</ql:key>
+   <ql:flags>6</ql:flags>
+   <ql:history>
+    <ql:event>
+     <ql:icon>://icons/48x48/Start.png</ql:icon>
+     <ql:time>2023-02-22T19:14:43.458Z</ql:time>
+     <ql:comment>Initial version.</ql:comment>
+    </ql:event>
+    <ql:event>
+     <ql:icon>://icons/48x48/SetEle.png</ql:icon>
+     <ql:time>2023-02-22T19:29:10.039Z</ql:time>
+     <ql:comment>Replaced elevation data with data from DEM files.</ql:comment>
+    </ql:event>
+    <ql:event>
+     <ql:icon>://icons/48x48/Time.png</ql:icon>
+     <ql:time>2023-02-22T19:29:23.771Z</ql:time>
+     <ql:comment>Changed start of track to mar. Feb. 21 11:28:56 2023 GMT.</ql:comment>
+    </ql:event>
+    <ql:event>
+     <ql:icon>://icons/48x48/Time.png</ql:icon>
+     <ql:time>2023-02-22T19:29:25.781Z</ql:time>
+     <ql:comment>Changed average moving hiking speed with profile 'Off Path or Rocky Terrain' to 2.9km/h.</ql:comment>
+    </ql:event>
+    <ql:event>
+     <ql:icon>://icons/48x48/Time.png</ql:icon>
+     <ql:time>2023-02-22T19:29:27.772Z</ql:time>
+     <ql:comment>Changed start of track to mar. Feb. 21 11:28:56 2023 GMT.</ql:comment>
+    </ql:event>
+   </ql:history>
+   <gpxx:TrackExtension>
+    <gpxx:DisplayColor>Blue</gpxx:DisplayColor>
+   </gpxx:TrackExtension>
+  </extensions>
+  <trkseg>
+   <trkpt lat="42.88484850" lon="-8.54957140">
+    <ele>226</ele>
+    <time>2023-02-21T11:28:56.738Z</time>
+    <extensions>
+     <ql:flags>16</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88472300" lon="-8.54950900">
+    <ele>226</ele>
+    <time>2023-02-21T11:29:15.166Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88453400" lon="-8.54942700">
+    <ele>226</ele>
+    <time>2023-02-21T11:29:42.525Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88435900" lon="-8.54938200">
+    <ele>225</ele>
+    <time>2023-02-21T11:30:07.086Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88411400" lon="-8.54947700">
+    <ele>225</ele>
+    <time>2023-02-21T11:30:42.220Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88402000" lon="-8.54958500">
+    <ele>225</ele>
+    <time>2023-02-21T11:30:59.191Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88393000" lon="-8.54968400">
+    <ele>225</ele>
+    <time>2023-02-21T11:31:15.155Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88395900" lon="-8.54983500">
+    <ele>225</ele>
+    <time>2023-02-21T11:31:30.982Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88400600" lon="-8.54996400">
+    <ele>225</ele>
+    <time>2023-02-21T11:31:45.582Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88410000" lon="-8.55012600">
+    <ele>225</ele>
+    <time>2023-02-21T11:32:06.509Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88395000" lon="-8.55035200">
+    <ele>224</ele>
+    <time>2023-02-21T11:32:37.383Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88386500" lon="-8.55042700">
+    <ele>224</ele>
+    <time>2023-02-21T11:32:51.356Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88368500" lon="-8.55037300">
+    <ele>224</ele>
+    <time>2023-02-21T11:33:16.776Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88351400" lon="-8.55030200">
+    <ele>224</ele>
+    <time>2023-02-21T11:33:41.433Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88331600" lon="-8.55025200">
+    <ele>224</ele>
+    <time>2023-02-21T11:34:09.205Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88318000" lon="-8.55025000">
+    <ele>224</ele>
+    <time>2023-02-21T11:34:27.961Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88295100" lon="-8.55021500">
+    <ele>224</ele>
+    <time>2023-02-21T11:34:59.740Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88277600" lon="-8.55021400">
+    <ele>224</ele>
+    <time>2023-02-21T11:35:23.874Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88261500" lon="-8.55022700">
+    <ele>224</ele>
+    <time>2023-02-21T11:35:46.116Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88253100" lon="-8.55035200">
+    <ele>223</ele>
+    <time>2023-02-21T11:36:03.289Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88245800" lon="-8.55050300">
+    <ele>223</ele>
+    <time>2023-02-21T11:36:21.615Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88226000" lon="-8.55080500">
+    <ele>223</ele>
+    <time>2023-02-21T11:37:02.647Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88209400" lon="-8.55108200">
+    <ele>222</ele>
+    <time>2023-02-21T11:37:38.886Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88198100" lon="-8.55128300">
+    <ele>222</ele>
+    <time>2023-02-21T11:38:04.545Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88186900" lon="-8.55140900">
+    <ele>222</ele>
+    <time>2023-02-21T11:38:24.591Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88174000" lon="-8.55152200">
+    <ele>222</ele>
+    <time>2023-02-21T11:38:45.753Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88159500" lon="-8.55162400">
+    <ele>222</ele>
+    <time>2023-02-21T11:39:08.267Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88149000" lon="-8.55172100">
+    <ele>222</ele>
+    <time>2023-02-21T11:39:25.773Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88140000" lon="-8.55179300">
+    <ele>222</ele>
+    <time>2023-02-21T11:39:40.173Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88139300" lon="-8.55190600">
+    <ele>222</ele>
+    <time>2023-02-21T11:39:51.990Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88130600" lon="-8.55208200">
+    <ele>222</ele>
+    <time>2023-02-21T11:40:13.497Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88114100" lon="-8.55194400">
+    <ele>223</ele>
+    <time>2023-02-21T11:40:40.211Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88106300" lon="-8.55227300">
+    <ele>222</ele>
+    <time>2023-02-21T11:41:15.269Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88106300" lon="-8.55251300">
+    <ele>221</ele>
+    <time>2023-02-21T11:41:39.609Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88106800" lon="-8.55276100">
+    <ele>221</ele>
+    <time>2023-02-21T11:42:04.770Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88120900" lon="-8.55293600">
+    <ele>221</ele>
+    <time>2023-02-21T11:42:31.097Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88134300" lon="-8.55302700">
+    <ele>221</ele>
+    <time>2023-02-21T11:42:51.753Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88151700" lon="-8.55310500">
+    <ele>221</ele>
+    <time>2023-02-21T11:43:18.333Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88168200" lon="-8.55322200">
+    <ele>221</ele>
+    <time>2023-02-21T11:43:45.310Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88186600" lon="-8.55322300">
+    <ele>223</ele>
+    <time>2023-02-21T11:44:11.328Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88200700" lon="-8.55332700">
+    <ele>223</ele>
+    <time>2023-02-21T11:44:34.015Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88209300" lon="-8.55355800">
+    <ele>222</ele>
+    <time>2023-02-21T11:45:00.273Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88219500" lon="-8.55376000">
+    <ele>222</ele>
+    <time>2023-02-21T11:45:25.123Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88221400" lon="-8.55399300">
+    <ele>221</ele>
+    <time>2023-02-21T11:45:48.898Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88212700" lon="-8.55428200">
+    <ele>220</ele>
+    <time>2023-02-21T11:46:20.568Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88205800" lon="-8.55450900">
+    <ele>220</ele>
+    <time>2023-02-21T11:46:45.479Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88217300" lon="-8.55467900">
+    <ele>220</ele>
+    <time>2023-02-21T11:47:08.905Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88232800" lon="-8.55470300">
+    <ele>220</ele>
+    <time>2023-02-21T11:47:31.553Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88249100" lon="-8.55458600">
+    <ele>220</ele>
+    <time>2023-02-21T11:47:58.947Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88266000" lon="-8.55448900">
+    <ele>222</ele>
+    <time>2023-02-21T11:48:24.969Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88283300" lon="-8.55441300">
+    <ele>223</ele>
+    <time>2023-02-21T11:48:50.041Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88286900" lon="-8.55452300">
+    <ele>221</ele>
+    <time>2023-02-21T11:49:02.287Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88294000" lon="-8.55450800">
+    <ele>221</ele>
+    <time>2023-02-21T11:49:12.196Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88298800" lon="-8.55451400">
+    <ele>221</ele>
+    <time>2023-02-21T11:49:18.843Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88307200" lon="-8.55464900">
+    <ele>219</ele>
+    <time>2023-02-21T11:49:36.777Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88312100" lon="-8.55475200">
+    <ele>219</ele>
+    <time>2023-02-21T11:49:49.218Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88318800" lon="-8.55496200">
+    <ele>219</ele>
+    <time>2023-02-21T11:50:12.433Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88336400" lon="-8.55509000">
+    <ele>219</ele>
+    <time>2023-02-21T11:50:39.958Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88349200" lon="-8.55522500">
+    <ele>218</ele>
+    <time>2023-02-21T11:51:02.297Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88354000" lon="-8.55532600">
+    <ele>218</ele>
+    <time>2023-02-21T11:51:14.493Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88362500" lon="-8.55517600">
+    <ele>219</ele>
+    <time>2023-02-21T11:51:33.698Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88369300" lon="-8.55532600">
+    <ele>217</ele>
+    <time>2023-02-21T11:51:51.568Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88372200" lon="-8.55551300">
+    <ele>218</ele>
+    <time>2023-02-21T11:52:10.950Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88359400" lon="-8.55570700">
+    <ele>217</ele>
+    <time>2023-02-21T11:52:37.382Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88355500" lon="-8.55594200">
+    <ele>216</ele>
+    <time>2023-02-21T11:53:02.839Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88346300" lon="-8.55613100">
+    <ele>214</ele>
+    <time>2023-02-21T11:53:25.825Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88331000" lon="-8.55620200">
+    <ele>212</ele>
+    <time>2023-02-21T11:53:48.119Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88309000" lon="-8.55633200">
+    <ele>213</ele>
+    <time>2023-02-21T11:54:21.199Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88305300" lon="-8.55642200">
+    <ele>213</ele>
+    <time>2023-02-21T11:54:31.656Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88302900" lon="-8.55657900">
+    <ele>212</ele>
+    <time>2023-02-21T11:54:47.919Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88306700" lon="-8.55682500">
+    <ele>210</ele>
+    <time>2023-02-21T11:55:13.412Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88294700" lon="-8.55686100">
+    <ele>211</ele>
+    <time>2023-02-21T11:55:31.509Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88294600" lon="-8.55701500">
+    <ele>212</ele>
+    <time>2023-02-21T11:55:47.622Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88291200" lon="-8.55716800">
+    <ele>214</ele>
+    <time>2023-02-21T11:56:03.837Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88293100" lon="-8.55724700">
+    <ele>214</ele>
+    <time>2023-02-21T11:56:12.269Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88300700" lon="-8.55744300">
+    <ele>211</ele>
+    <time>2023-02-21T11:56:34.740Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88307900" lon="-8.55738700">
+    <ele>208</ele>
+    <time>2023-02-21T11:56:47.384Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88321800" lon="-8.55742900">
+    <ele>209</ele>
+    <time>2023-02-21T11:57:08.223Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88321400" lon="-8.55762100">
+    <ele>207</ele>
+    <time>2023-02-21T11:57:27.702Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88321500" lon="-8.55780200">
+    <ele>206</ele>
+    <time>2023-02-21T11:57:47.052Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88323700" lon="-8.55792300">
+    <ele>206</ele>
+    <time>2023-02-21T11:58:00.142Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88317300" lon="-8.55801800">
+    <ele>205</ele>
+    <time>2023-02-21T11:58:13.293Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88311900" lon="-8.55807000">
+    <ele>204</ele>
+    <time>2023-02-21T11:58:22.431Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88304100" lon="-8.55812400">
+    <ele>204</ele>
+    <time>2023-02-21T11:58:34.501Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88289100" lon="-8.55828300">
+    <ele>203</ele>
+    <time>2023-02-21T11:59:00.729Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88270900" lon="-8.55824800">
+    <ele>204</ele>
+    <time>2023-02-21T11:59:26.078Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88255100" lon="-8.55837000">
+    <ele>202</ele>
+    <time>2023-02-21T11:59:51.135Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88243500" lon="-8.55850200">
+    <ele>201</ele>
+    <time>2023-02-21T12:00:12.520Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88230200" lon="-8.55862800">
+    <ele>200</ele>
+    <time>2023-02-21T12:00:34.897Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88215400" lon="-8.55877200">
+    <ele>199</ele>
+    <time>2023-02-21T12:00:59.994Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88195200" lon="-8.55887300">
+    <ele>198</ele>
+    <time>2023-02-21T12:01:30.425Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88176600" lon="-8.55888400">
+    <ele>200</ele>
+    <time>2023-02-21T12:01:56.765Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88163400" lon="-8.55882300">
+    <ele>201</ele>
+    <time>2023-02-21T12:02:15.991Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88154600" lon="-8.55863400">
+    <ele>200</ele>
+    <time>2023-02-21T12:02:38.678Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88160600" lon="-8.55845800">
+    <ele>198</ele>
+    <time>2023-02-21T12:02:58.352Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88153700" lon="-8.55837600">
+    <ele>198</ele>
+    <time>2023-02-21T12:03:10.989Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88138000" lon="-8.55829400">
+    <ele>198</ele>
+    <time>2023-02-21T12:03:34.182Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88123300" lon="-8.55832600">
+    <ele>198</ele>
+    <time>2023-02-21T12:03:54.712Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88106700" lon="-8.55840700">
+    <ele>197</ele>
+    <time>2023-02-21T12:04:19.034Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88097000" lon="-8.55852100">
+    <ele>197</ele>
+    <time>2023-02-21T12:04:36.715Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88086900" lon="-8.55882300">
+    <ele>196</ele>
+    <time>2023-02-21T12:05:10.686Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88075800" lon="-8.55899200">
+    <ele>194</ele>
+    <time>2023-02-21T12:05:33.888Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88059200" lon="-8.55920600">
+    <ele>193</ele>
+    <time>2023-02-21T12:06:05.433Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88044000" lon="-8.55920000">
+    <ele>193</ele>
+    <time>2023-02-21T12:06:26.403Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88031800" lon="-8.55929400">
+    <ele>192</ele>
+    <time>2023-02-21T12:06:46.305Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88016500" lon="-8.55942600">
+    <ele>193</ele>
+    <time>2023-02-21T12:07:11.293Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.88001500" lon="-8.55947100">
+    <ele>194</ele>
+    <time>2023-02-21T12:07:33.090Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.87984200" lon="-8.55961100">
+    <ele>192</ele>
+    <time>2023-02-21T12:08:00.853Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.87975600" lon="-8.55966500">
+    <ele>193</ele>
+    <time>2023-02-21T12:08:13.916Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.87966300" lon="-8.55980900">
+    <ele>192</ele>
+    <time>2023-02-21T12:08:33.353Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.87950900" lon="-8.56003000">
+    <ele>191</ele>
+    <time>2023-02-21T12:09:04.350Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.87945400" lon="-8.56019500">
+    <ele>190</ele>
+    <time>2023-02-21T12:09:22.723Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.87931500" lon="-8.56036600">
+    <ele>189</ele>
+    <time>2023-02-21T12:09:48.816Z</time>
+    <extensions>
+     <ql:flags>0</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+   <trkpt lat="42.87919900" lon="-8.56050600">
+    <ele>189</ele>
+    <time>2023-02-21T12:10:10.206Z</time>
+    <extensions>
+     <ql:flags>16</ql:flags>
+     <ql:activity>0</ql:activity>
+    </extensions>
+   </trkpt>
+  </trkseg>
+ </trk>
+ <extensions>
+  <ql:key>25a9dc15c052f15d6361c856c5206726</ql:key>
+  <ql:sortingRoadbook>0</ql:sortingRoadbook>
+  <ql:sortingFolder>0</ql:sortingFolder>
+  <ql:correlation>1</ql:correlation>
+  <ql:invalidDataOk>0</ql:invalidDataOk>
+ </extensions>
+</gpx>
