@@ -1,0 +1,45 @@
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<Placemark id="k0OTA">
+<name>Inicio de Ruta</name><description>Rúa de Mallou</description><ExtendedData>
+  <Data name="_umap_options"><value>{"color":"Crimson","iconClass":"Default","iconUrl":"/uploads/pictogram/star-stroked.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.529146,42.892328</coordinates></Point></Placemark>
+<Placemark id="IxNzA">
+<name>R19</name><description>Sendero que discurre por los parques Avilés de Taramancos, Salgueiriños y Pozo da Neve y por zonas verdes de Mallou.</description><ExtendedData>
+  <Data name="_umap_options"><value>{"weight":5,"opacity":1,"color":"Crimson"}</value></Data></ExtendedData>
+  <LineString><coordinates></coordinates></LineString></Placemark>
+<Placemark id="k5MTA">
+<name>Depósito de Auga dos Salgueiriños</name><description>Depósito de Auga</description><ExtendedData>
+  <Data name="_umap_options"><value>{"iconClass":"Drop","color":"Green","iconUrl":"/uploads/pictogram/water-tower.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.529433,42.891881</coordinates></Point></Placemark>
+<Placemark id="A2NjE">
+<name>Parque Avilés de Taramancos</name><description>Parque Avilés de Taramancos</description><ExtendedData>
+  <Data name="_umap_options"><value>{"color":"Green","iconClass":"Drop","iconUrl":"/uploads/pictogram/park.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.530463,42.892009</coordinates></Point></Placemark>
+<Placemark id="Y1MjM">
+<name>Parque Infantil</name><description>Parque Infantil</description><ExtendedData>
+  <Data name="_umap_options"><value>{"color":"Green","iconClass":"Drop","iconUrl":"/uploads/pictogram/playground.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.531898,42.892074</coordinates></Point></Placemark>
+<Placemark id="gxNjg">
+<name>Parque dos Salgueiriños</name><description>Parque dos Salgueiriños</description><ExtendedData>
+  <Data name="_umap_options"><value>{"color":"Green","iconClass":"Drop","iconUrl":"/uploads/pictogram/park.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.531747,42.895668</coordinates></Point></Placemark>
+<Placemark id="UzNTc">
+<name>Río Corgo</name><description>Río Corgo</description><ExtendedData>
+  <Data name="_umap_options"><value>{"color":"Green","iconClass":"Drop","iconUrl":"/uploads/pictogram/spring.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.531098,42.896941</coordinates></Point></Placemark>
+<Placemark id="I1NTk">
+<name>Parque do Pozo da Neve</name><description>Parque do Pozo da Neve</description><ExtendedData>
+  <Data name="_umap_options"><value>{"color":"Green","iconClass":"Drop","iconUrl":"/uploads/pictogram/park.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.528953,42.898936</coordinates></Point></Placemark>
+<Placemark id="Y2MTc">
+<name>Parque infantil</name><description>Parque Infantil</description><ExtendedData>
+  <Data name="_umap_options"><value>{"color":"Green","iconClass":"Drop","iconUrl":"/uploads/pictogram/playground.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.528472,42.89881</coordinates></Point></Placemark>
+<Placemark id="EyNTA">
+<name>Castro do Pozo da Neve</name><description>Castro do Pozo da Neve</description><ExtendedData>
+  <Data name="_umap_options"><value>{"color":"Green","iconClass":"Drop","iconUrl":"/uploads/pictogram/archaeological-site.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.528668,42.898513</coordinates></Point></Placemark>
+<Placemark id="E4NTc">
+<name>Fonte de Mallou de Arriba</name><description>Fonte de Mallou de Arriba</description><ExtendedData>
+  <Data name="_umap_options"><value>{"color":"Green","iconClass":"Drop","iconUrl":"/uploads/pictogram/spring.svg"}</value></Data></ExtendedData>
+  <Point><coordinates>-8.526029,42.89557</coordinates></Point></Placemark></Document></kml>
